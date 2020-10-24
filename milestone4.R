@@ -45,7 +45,7 @@ seda_district_ela_scores <- seda_district_cs %>%
     select(leaid_c, mn_all)
 
 temp_ljoin_1 <- left_join(seda_district_cov_sesall, seda_district_math_scores, by = c("leaid" = "leaid_c")) 
-seda_ses_vs_cs_scores <- left_join(ljoin_1, seda_district_ela_scores, by = c("leaid" = "leaid_c"))
+seda_ses_vs_cs_scores <- left_join(temp_ljoin_1, seda_district_ela_scores, by = c("leaid" = "leaid_c"))
 
 
 
