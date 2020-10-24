@@ -1,0 +1,72 @@
+---
+title: 'Exploration #1'
+author: "Andrew Jing"
+date: "10/22/2020"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+library(janitor)
+
+
+```
+
+
+```{r read_csv()}
+seda_district_cs <- read_csv("raw_data/stanford/seda_geodist_long_cs_v30.csv",
+                         col_types = cols(.default = col_number(),
+                                          leanm = col_character(),
+                                          stateabb = col_character(),
+                                          subject = col_character())) %>% 
+    clean_names()
+seda_district_cov <- read_csv("raw_data/stanford/SEDA_cov_geodist_long_v30.csv",
+                         col_types = cols(.default = col_number(),
+                                          leaname = col_character(),
+                                          stateabb = col_character(),
+                                          gslo = col_character())) %>% 
+    clean_names()
+
+```
+
+```{r bottom 15%}
+seda_district_cov_sesall <- seda_district_cov %>%
+  filter(year == 2016 & grade == 8) %>% 
+  select(leaid, sesall) %>% 
+  arrange(sesall) %>% 
+  mutate(sesall_rank = 1:n()) %>% 
+  filter(sesall_rank <= 0.15 * n())
+
+seda_district_math_scores <- seda_district_cs %>% 
+  filter(year == 2016 & grade == 8 & subject == "math") %>% 
+  select(leaid_c, leanm, mn_all)
+
+seda_district_ela_scores <- seda_district_cs %>% 
+  filter(year == 2016 & grade == 8 & subject == "ela") %>% 
+  select(leaid_c, mn_all)
+
+temp_ljoin_1 <- left_join(seda_district_cov_sesall, seda_district_math_scores, by = c("leaid" = "leaid_c")) 
+seda_ses_vs_cs_scores <- left_join(ljoin_1, seda_district_ela_scores, by = c("leaid" = "leaid_c"))
+seda_ses_vs_cs_scores %>% 
+  drop_na() %>% 
+  ggplot(aes(x = mn_all.x)) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), binwidth = 0.05) +
+  labs(title = "Math performance of 2016 8th graders by school district",
+       subtitle = "From school districts in the bottom 15% of socioeconomic ranking in the U.S.",
+       x = "Math CS Scale Score", y = "Percent of School Districts") +
+  theme_bw() +
+  geom_vline(xintercept = 0)
+seda_ses_vs_cs_scores %>% 
+  drop_na() %>% 
+  ggplot(aes(x = mn_all.y)) +
+  geom_histogram(aes(y = after_stat(count / sum(count))), binwidth = 0.05) +
+  labs(title = "ELA performance of 2016 8th graders by school district",
+       subtitle = "From school districts in the bottom 15% of socioeconomic ranking in the U.S.",
+       x = "ELA CS Scale Score", y = "Percent of School Districts") +
+  theme_bw() +
+  geom_vline(xintercept = 0)
+
+
+```
+
