@@ -153,6 +153,174 @@ state_merit_tenure <- tibble(merit_tenure = c("Not Required", "Partially Require
 
 
 
+hist_ae_merit_pay <- posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-ECD equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in All-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ne_merit_pay <- posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for NEC-ECD equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in NEC-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ab_merit_pay <- posterior_epred(mod_ab_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-Black equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in All-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_wb_merit_pay <- posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for White-Black equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in White-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ae_need_pay <- posterior_epred(mod_ae_need_pay, newdata = state_need_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-ECD equity by state",
+       subtitle = "Difference between need pay and no need pay",
+       x = "Average difference in All-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ne_need_pay <- posterior_epred(mod_ne_need_pay, newdata = state_need_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for NEC-ECD equity by state",
+       subtitle = "Difference between need pay and no need pay",
+       x = "Average difference in NEC-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ab_need_pay <- posterior_epred(mod_ab_need_pay, newdata = state_need_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-Black equity by state",
+       subtitle = "Difference between need pay and no need pay",
+       x = "Average difference in All-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_wb_need_pay <- posterior_epred(mod_wb_need_pay, newdata = state_need_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for White-Black equity by state",
+       subtitle = "Difference between need pay and no need pay",
+       x = "Average difference in White-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ae_merit_tenure <- posterior_epred(mod_ae_merit_tenure, newdata = state_merit_tenure) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-ECD equity by state",
+       subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
+       x = "Average difference in All-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ne_merit_tenure <- posterior_epred(mod_ne_merit_tenure, newdata = state_merit_tenure) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for NEC-ECD equity by state",
+       subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
+       x = "Average difference in NEC-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_ab_merit_tenure <- posterior_epred(mod_ab_merit_tenure, newdata = state_merit_tenure) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for All-Black equity by state",
+       subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
+       x = "Average difference in All-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+hist_wb_merit_tenure <- posterior_epred(mod_wb_merit_tenure, newdata = state_merit_tenure) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, fill = after_stat(x), y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", binwidth = 0.0005, color = "darkgrey") +
+  theme_bw() +
+  labs(title = "Posterior for White-Black equity by state",
+       subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
+       x = "Average difference in White-Black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -162,7 +330,19 @@ ui <- fluidPage(navbarPage(
   "State-Wide Equitable Education Policies",
   tabPanel(
     "Overview",
-      "Policies and Equity by State:",
+      
+    h4("Policies"),
+    p("Merit Pay: Teacher pay that considers performance"),
+    p("Need Pay: Higher teacher pay in in high-need schools"),
+    p("Meit Tenure: Teacher tenure decisions requiring proof of teacher effectiveness"),
+    
+    h4("Equity"),
+    p("Measured by the difference in differences of several sugroups' academic growth scores"),
+    
+    
+    
+    
+    h4("Policies and Equity by State"),
       
       
       
@@ -182,23 +362,24 @@ ui <- fluidPage(navbarPage(
 
   ),
   tabPanel("Correlation",
-    h3("Merit Pay"),
-    plotOutput("ae_merit_pay"),
-    plotOutput("ne_merit_pay"),
-    plotOutput("ab_merit_pay"),
-    plotOutput("wb_merit_pay"),
-    p(""),
-    h3("Need Pay"),
-    plotOutput("ae_need_pay"),
-    plotOutput("ne_need_pay"),
-    plotOutput("ab_need_pay"),
-    plotOutput("wb_need_pay"),
-    p(""),
-    h3("Merit Tenure"),
-    plotOutput("ae_merit_tenure"),
-    plotOutput("ne_merit_tenure"),
-    plotOutput("ab_merit_tenure"),
-    plotOutput("wb_merit_tenure")
+           
+           
+           selectInput(inputId = "policy2",
+                       label = "Select a state-wide policy:",
+                       choices = policy_names),
+           
+           selectInput(inputId = "gap2",
+                       label = "Select a measurement of inequity, comparing:",
+                       choices = gap_names),
+    
+    
+    plotOutput("hist_correlation"),
+    
+    
+    
+    h4("Model"),
+    p("Stan engine linear regression:"),
+    withMathJax(uiOutput("model"))
     
     
   ),
@@ -206,13 +387,12 @@ ui <- fluidPage(navbarPage(
            
            h4("Author"),
            p("Andrew Jing"),
-           p(""),
+           
            
            h4("About"),
            p("This final project uses currently established state-wide policies
              to predict the racial and socioeconomic inequities within the
              state's school system."),
-           p(""),
            p("Currently the data comes from The Education Opportunity Project
              at Stanford University and the National Council on Teacher Quality.")
   )
@@ -255,172 +435,31 @@ server <- function(input, output, session) {
     selected_equity()
   })
   
-  output$ae_merit_pay <- renderPlot({
-    posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-ECD equity by state",
-           subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
-           x = "Average difference in All-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
+  
+  
+  selected_correlation <- reactive({
+    if(input$policy2 == "Merit Pay" & input$gap2 == "Econ. disadvantaged vs. all students") return(hist_ae_merit_pay)
+    if(input$policy2 == "Merit Pay" & input$gap2 == "Econ. disadvantaged vs. not students") return(hist_ne_merit_pay)
+    if(input$policy2 == "Merit Pay" & input$gap2 == "Black vs. all students") return(hist_ab_merit_pay)
+    if(input$policy2 == "Merit Pay" & input$gap2 == "Black vs. white students") return(hist_wb_merit_pay)
     
-  output$ne_merit_pay <- renderPlot({
-    posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for NEC-ECD equity by state",
-           subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
-           x = "Average difference in NEC-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
+    if(input$policy2 == "Merit Tenure" & input$gap2 == "Econ. disadvantaged vs. all students") return(hist_ae_merit_tenure)
+    if(input$policy2 == "Merit Tenure" & input$gap2 == "Econ. disadvantaged vs. not students") return(hist_ne_merit_tenure)
+    if(input$policy2 == "Merit Tenure" & input$gap2 == "Black vs. all students") return(hist_ab_merit_tenure)
+    if(input$policy2 == "Merit Tenure" & input$gap2 == "Black vs. white students") return(hist_wb_merit_tenure)
+    
+    if(input$policy2 == "Need Pay" & input$gap2 == "Econ. disadvantaged vs. all students") return(hist_ae_need_pay)
+    if(input$policy2 == "Need Pay" & input$gap2 == "Econ. disadvantaged vs. not students") return(hist_ne_need_pay)
+    if(input$policy2 == "Need Pay" & input$gap2 == "Black vs. all students") return(hist_ab_need_pay)
+    if(input$policy2 == "Need Pay" & input$gap2 == "Black vs. white students") return(hist_wb_need_pay)
   })
   
-  output$ab_merit_pay <- renderPlot({
-    posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-Black equity by state",
-           subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
-           x = "Average difference in All-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
+  output$hist_correlation <- renderPlot({
+    selected_correlation()
   })
   
-  output$wb_merit_pay <- renderPlot({
-    posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for White-Black equity by state",
-           subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
-           x = "Average difference in White-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ae_need_pay <- renderPlot({
-    posterior_epred(mod_ae_need_pay, newdata = state_need_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-ECD equity by state",
-           subtitle = "Difference between need pay and no need pay",
-           x = "Average difference in All-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ne_need_pay <- renderPlot({
-    posterior_epred(mod_ne_need_pay, newdata = state_need_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for NEC-ECD equity by state",
-           subtitle = "Difference between need pay and no need pay",
-           x = "Average difference in NEC-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ab_need_pay <- renderPlot({
-    posterior_epred(mod_ab_need_pay, newdata = state_need_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-Black equity by state",
-           subtitle = "Difference between need pay and no need pay",
-           x = "Average difference in All-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$wb_need_pay <- renderPlot({
-    posterior_epred(mod_wb_need_pay, newdata = state_need_pay) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for White-Black equity by state",
-           subtitle = "Difference between need pay and no need pay",
-           x = "Average difference in White-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ae_merit_tenure <- renderPlot({
-    posterior_epred(mod_ae_merit_tenure, newdata = state_merit_tenure) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-ECD equity by state",
-           subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
-           x = "Average difference in All-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ne_merit_tenure <- renderPlot({
-    posterior_epred(mod_ne_merit_tenure, newdata = state_merit_tenure) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for NEC-ECD equity by state",
-           subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
-           x = "Average difference in NEC-ECD gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$ab_merit_tenure <- renderPlot({
-    posterior_epred(mod_ae_merit_tenure, newdata = state_merit_tenure) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for All-Black equity by state",
-           subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
-           x = "Average difference in All-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
-  })
-  
-  output$wb_merit_tenure <- renderPlot({
-    posterior_epred(mod_ae_merit_tenure, newdata = state_merit_tenure) %>% 
-      as_tibble() %>% 
-      mutate(diff = `2` - `1`) %>%  
-      ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
-      geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
-      theme_bw() +
-      labs(title = "Posterior for White-Black equity by state",
-           subtitle = "Difference between required teacher effectiveness proof for tenure and no proof requirement",
-           x = "Average difference in White-Black gaps",
-           y = "Distribution") +
-      geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
+  output$model <- renderUI({
+    withMathJax("$$ equity\\_measurement_{i} = \\beta_0 + \\beta_1policy_{i} + \\epsilon_{i} $$")
   })
   
   
