@@ -1,0 +1,227 @@
+---
+title: "Exploration of State-Wide Policies"
+author: "Andrew Jing"
+date: "12/1/2020"
+output: html_document
+---
+
+```{r setup}
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(usmap)
+library(tidymodels)
+library(rstanarm)
+library(RColorBrewer)
+
+
+```
+
+
+```{r reading/writing}
+state_policy <- read_csv("used_data/state_policy_list.csv") %>% 
+  mutate(merit_pay = factor(merit_pay, levels = c("No Infrastructure", "Encouraged", "Required"))) %>% 
+  mutate(need_pay = factor(need_pay, levels = c("No", "Yes"))) %>% 
+  mutate(merit_tenure = factor(merit_tenure, levels = c("Not Required", "Partially Required", "Proof Required", "No State Tenure")))
+
+growth_scores <- read_csv("raw_data/stanford/seda_geodist_pool_cs_v30.csv", col_types = cols(leaidC = col_double())) %>% 
+  select(leaidC, fips, leanm, stateabb, subgroup, gap_est, mn_grd_ol)
+demographics <- read_csv("raw_data/stanford/SEDA_cov_geodist_pool_v30.csv") %>% 
+  select(leaid, totenrl, perblk, perwht, perecd)
+
+write.csv(growth_scores, "used_data/seda_pool_cs.csv", append = TRUE, row.names = FALSE)
+write.csv(demographics, "used_data/seda_cov_pool.csv", append = TRUE, row.names = FALSE)
+
+
+```
+
+
+```{r wrangling}
+growth_scores %>% 
+  filter(gap_est == 0) %>% 
+  group_by(stateabb, subgroup) %>% 
+  # mn_grd_ol is an estimate of average growth scores
+  summarize(growth_score = mean(mn_grd_ol, na.rm = TRUE)) %>% 
+  mutate(growth_score = ifelse(growth_score == "NaN", NA, growth_score)) %>% 
+  pivot_wider(names_from = subgroup, values_from = growth_score)
+%>% 
+  mutate()
+
+
+growth_scores %>% 
+  filter(gap_est == 0 & subgroup == "all") %>% 
+  group_by(stateabb) %>% 
+  # mn_grd_ol is an estimate of average growth scores
+  summarize(growth_score_sd = sd(mn_grd_ol, na.rm = TRUE))
+    # ^ up until here, this is the standard deviation of aggregated geodist
+    # growth scores.
+
+
+
+growth_scores
+equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>% 
+  rename(state = stateabb) %>% 
+  filter(gap_est == 0) %>% 
+  filter(subgroup != "fem" & subgroup != "mal" & subgroup != "nam") %>% 
+  mutate(subgroup_count = case_when(subgroup == "all" ~ totenrl,
+                                      subgroup == "blk" ~ totenrl * perblk,
+                                      subgroup == "ecd" ~ totenrl * perecd,
+                                      subgroup == "wht" ~ totenrl * perwht,
+                                      subgroup == "nec" ~ totenrl * (1 - perecd))) %>% 
+  select(-perblk, -perwht, -perecd) %>% 
+  group_by(state, fips, subgroup) %>% 
+  summarize(weighted_mn_grd_ol = weighted.mean(x = mn_grd_ol, y = totenrl * perecd, na.rm = TRUE), .groups = "drop") %>% 
+    # This circumvents the need for individuals' growth scores because I care
+    # about state-wide subgroup gaps, not geographical district-wide gaps. The
+    # weighted average allows me to get the state-wide gap from district-wide
+    # data.
+    # mn_grd_ol is an estimate of average growth scores, and this dataset
+    # categorizes based on subgroup.
+  filter(!is.na(weighted_mn_grd_ol)) %>% 
+  pivot_wider(names_from = subgroup, values_from = weighted_mn_grd_ol) %>% 
+  mutate(all_black = all - blk,
+         white_black = wht - blk,
+         all_ecd = all - ecd,
+         nec_ecd = nec - ecd) %>% 
+  select(-asn, -blk, -ecd, -hsp, -nec, -wht) %>% 
+  rename(avg_growth_scores = all)
+
+
+policy_vs_equity <- inner_join(state_policy, equity, by = c("state_abb" = "state"))
+
+
+
+equity
+state_policy
+policy_vs_equity
+
+equity %>% 
+  ggplot(aes(x = growth_score_diff)) +
+  geom_histogram() +
+  geom_density() +
+  facet_wrap(~gap)
+  
+
+```
+
+```{r maps}
+policy_vs_equity
+
+#POLICY MAPS
+map_merit_tenure <- plot_usmap(data = policy_vs_equity, values = "merit_tenure") +
+  scale_fill_manual(name = "Merit Tenure", values = c("#FF9593", "#FFCB5C", "#ACDC6E", "#f7f7f7"))+ 
+  labs(title = "Merit Tenure by State",
+       subtitle = "Requirement of proof of teacher effectiveness when evaluating teachers for tenure")
+map_merit_pay <- plot_usmap(data = policy_vs_equity, values = "merit_pay") +
+  scale_fill_manual(name = "Merit Pay", values = c("#FF9593", "#FFCB5C", "#ACDC6E", "#f7f7f7")) +
+  labs(title = "Merit Pay by State",
+       subtitle = "Consideration of teacher performance when determining teacher pay")
+map_need_pay <- plot_usmap(data = policy_vs_equity, values = "need_pay") +
+  scale_fill_manual(name = "Need Pay", values = c("#FF9593", "#ACDC6E", "#f7f7f7")) +
+  labs(title = "Need Pay by State",
+       subtitle = "Incentive for teaching in high-need schools through differential teacher pay")
+
+#INEQUITY MAPS
+map_all_ecd <- plot_usmap(data = policy_vs_equity, values = "all_ecd") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "ECD-all gap", guide = "legend", breaks = c(-0.02, 0, 0.02, 0.04), labels = c("More Equitable", "Neutral", "More Inequitable", "Most Inequitable")) +
+  labs(title = "ECD-All Inequity by State",
+       subtitle = "Inequitable school systems benefit ECD students less than the state average")
+map_nec_ecd <- plot_usmap(data = policy_vs_equity, values = "nec_ecd") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "ECD-NEC gap", guide = "legend", breaks = c(-0.02, 0, 0.02, 0.04), labels = c("More Equitable", "Neutral", "More Inequitable", "Most Inequitable")) +
+  labs(title = "ECD-All Inequity by State",
+       subtitle = "Inequitable school systems benefit ECD students less than other students")
+map_all_blk <- plot_usmap(data = policy_vs_equity, values = "all_black") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Black-all gap", guide = "legend", breaks = c(-0.02, 0, 0.02, 0.04), labels = c("More Equitable", "Neutral", "More Inequitable", "Most Inequitable")) +
+  labs(title = "Black-All Inequity by State",
+       subtitle = "Inequitable school systems benefit black students less than the state average")
+map_wht_blk <- plot_usmap(data = policy_vs_equity, values = "white_black") +
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Black-white gap", guide = "legend", breaks = c(-0.02, 0, 0.02, 0.04), labels = c("More Equitable", "Neutral", "More Inequitable", "Most Inequitable")) +
+  labs(title = "Black-White Inequity by State",
+       subtitle = "Inequitable school systems benefit black students less than white students")
+
+```
+
+```{r models}
+seed(2020)
+mod_ne_need_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         nec_ecd ~ need_pay)
+mod_ne_merit_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         nec_ecd ~ merit_pay)
+mod_ne_merit_tenure <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         nec_ecd ~ merit_tenure)
+
+mod_ae_need_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_ecd ~ need_pay)
+mod_ae_merit_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_ecd ~ merit_pay)
+mod_ae_merit_tenure <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_ecd ~ merit_tenure)
+
+mod_wb_need_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         white_black ~ need_pay)
+mod_wb_merit_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         white_black ~ merit_pay)
+mod_wb_merit_tenure <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         white_black ~ merit_tenure)
+
+mod_ab_need_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_black ~ need_pay)
+mod_ab_merit_pay <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_black ~ merit_pay)
+mod_ab_merit_tenure <- stan_glm(data = policy_vs_equity,
+         refresh = 0,
+         all_black ~ merit_tenure)
+
+
+state_need_pay <- tibble(need_pay = c("No", "Yes"))
+state_merit_pay <- tibble(merit_pay = c("No Infrastructure", "Encouraged", "Required"))
+state_merit_tenure <- tibble(merit_tenure = c("Not Required", "Partially Required", "Proof Required", "No State Tenure"))
+
+
+posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
+  theme_bw() +
+  labs(title = "Posterior for NEC-ECD equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in NEC-ECD gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
+
+posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay) %>% 
+  as_tibble() %>% 
+  mutate(diff = `2` - `1`) %>%  
+  ggplot(aes(x = diff, y = after_stat(count / sum(count)))) +
+  geom_histogram(position = "identity", alpha = 0.5, binwidth = 0.0005) +
+  theme_bw() +
+  labs(title = "Posterior for white-black equity by state",
+       subtitle = "Difference between encouraged merit pay and not encouraged merit pay",
+       x = "Average difference in white-black gaps",
+       y = "Distribution") +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
+
+
+
+print(mod_ne_merit_pay, digits = 4)
+print(mod_ne_merit_tenure, digits = 4)
+print(mod_ne_need_pay, digits = 4)
+model_test1[1] %>% 
+  as_tibble()
+
+
+policy_vs_equity
+```
+
