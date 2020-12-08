@@ -1,0 +1,52 @@
+state,state_abb,merit_pay,need_pay,merit_tenure
+Alabama,AL,No Infrastructure,No,Not Required
+Alaska,AK,No Infrastructure,No,Not Required
+Arizona,AZ,Encouraged,No,Partially Required
+Arkansas,AR,Encouraged,Yes,Not Required
+California,CA,No Infrastructure,Yes,Not Required
+Colorado,CO,No Infrastructure,Yes,Partially Required
+Connecticut,CT,No Infrastructure,No,Partially Required
+Delaware,DE,Encouraged,No,Partially Required
+District of Columbia,DC,No Infrastructure,No,Not Required
+Florida,FL,Required,Yes,No State Tenure
+Georgia,GA,Required,No,Not Required
+Hawaii,HI,Required,Yes,Proof Required
+Idaho,ID,Encouraged,No,Partially Required
+Illinois,IL,Encouraged,No,Partially Required
+Indiana,IN,Required,No,Proof Required
+Iowa,IA,No Infrastructure,No,Not Required
+Kansas,KS,No Infrastructure,No,No State Tenure
+Kentucky,KY,Encouraged,Yes,Not Required
+Louisiana,LA,Required,Yes,Partially Required
+Maine,ME,No Infrastructure,No,Not Required
+Maryland,MD,No Infrastructure,Yes,Not Required
+Massachusetts,MA,Encouraged,No,Partially Required
+Michigan,MI,Required,No,Partially Required
+Minnesota,MN,Required,No,Not Required
+Mississippi,MS,Encouraged,Yes,Not Required
+Missouri,MO,Encouraged,No,Not Required
+Montana,MT,No Infrastructure,No,Not Required
+Nebraska,NE,No Infrastructure,No,Not Required
+Nevada,NV,Required,Yes,Proof Required
+New Hampshire,NH,No Infrastructure,No,Not Required
+New Jersey,NJ,No Infrastructure,No,Partially Required
+New Mexico,NM,Encouraged,Yes,Not Required
+New York,NY,No Infrastructure,Yes,Proof Required
+North Carolina,NC,No Infrastructure,Yes,No State Tenure
+North Dakota,ND,No Infrastructure,No,Not Required
+Ohio,OH,No Infrastructure,Yes,Not Required
+Oklahoma,OK,Encouraged,Yes,Not Required
+Oregon,OR,No Infrastructure,No,Not Required
+Pennsylvania,PA,No Infrastructure,No,Not Required
+Rhode Island,RI,No Infrastructure,No,Not Required
+South Carolina,SC,Encouraged,No,Partially Required
+South Dakota,SD,No Infrastructure,No,Not Required
+Tennessee,TN,Encouraged,Yes,Partially Required
+Texas,TX,No Infrastructure,Yes,Not Required
+Utah,UT,Required,Yes,Not Required
+Vermont,VT,No Infrastructure,No,Not Required
+Virginia,VA,Encouraged,Yes,Partially Required
+Washington,WA,No Infrastructure,Yes,Partially Required
+West Virginia,WV,No Infrastructure,Yes,Not Required
+Wisconsin,WI,No Infrastructure,Yes,No State Tenure
+Wyoming,WY,No Infrastructure,Yes,Partially Required
