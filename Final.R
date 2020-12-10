@@ -164,7 +164,7 @@ hist_ae_merit_pay <- posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay
        x = "Average difference in All-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ne_merit_pay <- posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay) %>% 
   as_tibble() %>% 
@@ -177,7 +177,7 @@ hist_ne_merit_pay <- posterior_epred(mod_ne_merit_pay, newdata = state_merit_pay
        x = "Average difference in NEC-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ab_merit_pay <- posterior_epred(mod_ab_merit_pay, newdata = state_merit_pay) %>% 
   as_tibble() %>% 
@@ -190,7 +190,7 @@ hist_ab_merit_pay <- posterior_epred(mod_ab_merit_pay, newdata = state_merit_pay
        x = "Average difference in All-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_wb_merit_pay <- posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay) %>% 
   as_tibble() %>% 
@@ -203,7 +203,7 @@ hist_wb_merit_pay <- posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay
        x = "Average difference in White-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ae_need_pay <- posterior_epred(mod_ae_need_pay, newdata = state_need_pay) %>% 
   as_tibble() %>% 
@@ -216,7 +216,7 @@ hist_ae_need_pay <- posterior_epred(mod_ae_need_pay, newdata = state_need_pay) %
        x = "Average difference in All-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ne_need_pay <- posterior_epred(mod_ne_need_pay, newdata = state_need_pay) %>% 
   as_tibble() %>% 
@@ -229,7 +229,7 @@ hist_ne_need_pay <- posterior_epred(mod_ne_need_pay, newdata = state_need_pay) %
        x = "Average difference in NEC-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ab_need_pay <- posterior_epred(mod_ab_need_pay, newdata = state_need_pay) %>% 
   as_tibble() %>% 
@@ -242,7 +242,7 @@ hist_ab_need_pay <- posterior_epred(mod_ab_need_pay, newdata = state_need_pay) %
        x = "Average difference in All-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_wb_need_pay <- posterior_epred(mod_wb_need_pay, newdata = state_need_pay) %>% 
   as_tibble() %>% 
@@ -255,7 +255,7 @@ hist_wb_need_pay <- posterior_epred(mod_wb_need_pay, newdata = state_need_pay) %
        x = "Average difference in White-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ae_merit_tenure <- posterior_epred(mod_ae_merit_tenure, newdata = state_merit_tenure) %>% 
   as_tibble() %>% 
@@ -268,7 +268,7 @@ hist_ae_merit_tenure <- posterior_epred(mod_ae_merit_tenure, newdata = state_mer
        x = "Average difference in All-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ne_merit_tenure <- posterior_epred(mod_ne_merit_tenure, newdata = state_merit_tenure) %>% 
   as_tibble() %>% 
@@ -281,7 +281,7 @@ hist_ne_merit_tenure <- posterior_epred(mod_ne_merit_tenure, newdata = state_mer
        x = "Average difference in NEC-ECD gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_ab_merit_tenure <- posterior_epred(mod_ab_merit_tenure, newdata = state_merit_tenure) %>% 
   as_tibble() %>% 
@@ -294,7 +294,7 @@ hist_ab_merit_tenure <- posterior_epred(mod_ab_merit_tenure, newdata = state_mer
        x = "Average difference in All-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 hist_wb_merit_tenure <- posterior_epred(mod_wb_merit_tenure, newdata = state_merit_tenure) %>% 
   as_tibble() %>% 
@@ -307,7 +307,7 @@ hist_wb_merit_tenure <- posterior_epred(mod_wb_merit_tenure, newdata = state_mer
        x = "Average difference in White-Black gaps",
        y = "Distribution") +
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey") +
-  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red")
+  scale_fill_gradient2(low = "#1ad63f", mid = "#f7f7f7", high = "red", name = "Policy-Gap Correlation")
 
 
 
