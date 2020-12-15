@@ -324,7 +324,7 @@ hist_wb_merit_tenure <- posterior_epred(mod_wb_merit_tenure, newdata = state_mer
 
 
 ui <- fluidPage(navbarPage(
-  "State-Wide Equitable Education Policies",
+  "Equity in Education: Effectiveness of State-Level Policies",
   tabPanel(
     "Overview",
     h4("Growth Scores"),
