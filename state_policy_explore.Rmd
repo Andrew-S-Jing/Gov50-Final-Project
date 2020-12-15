@@ -62,7 +62,7 @@ growth_scores
 equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>% 
   rename(state = stateabb) %>% 
   filter(gap_est == 0) %>% 
-  filter(subgroup != "fem" & subgroup != "mal" & subgroup != "nam") %>% 
+  filter(subgroup %in% c("all", "blk", "ecd", "wht", "nec")) %>% 
   mutate(subgroup_count = case_when(subgroup == "all" ~ totenrl,
                                       subgroup == "blk" ~ totenrl * perblk,
                                       subgroup == "ecd" ~ totenrl * perecd,
@@ -70,7 +70,7 @@ equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>
                                       subgroup == "nec" ~ totenrl * (1 - perecd))) %>% 
   select(-perblk, -perwht, -perecd) %>% 
   group_by(state, fips, subgroup) %>% 
-  summarize(weighted_mn_grd_ol = weighted.mean(x = mn_grd_ol, y = totenrl * perecd, na.rm = TRUE), .groups = "drop") %>% 
+  summarize(weighted_mn_grd_ol = weighted.mean(x = mn_grd_ol, w = subgroup_count, na.rm = TRUE), .groups = "drop") %>% 
     # This circumvents the need for individuals' growth scores because I care
     # about state-wide subgroup gaps, not geographical district-wide gaps. The
     # weighted average allows me to get the state-wide gap from district-wide
@@ -83,7 +83,7 @@ equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>
          white_black = wht - blk,
          all_ecd = all - ecd,
          nec_ecd = nec - ecd) %>% 
-  select(-asn, -blk, -ecd, -hsp, -nec, -wht) %>% 
+  select(-blk, -ecd, -nec, -wht) %>% 
   rename(avg_growth_scores = all)
 
 
@@ -214,7 +214,6 @@ posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay) %>%
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
 
 
-<<<<<<< HEAD
 posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>% 
   as_tibble() %>% 
   mutate(diff = `2` - `1`) %>%  
@@ -230,8 +229,6 @@ posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>%
 
 
 
-=======
->>>>>>> 334a6658a939c91e7ffb56852bc31f378ab2e17c
 
 print(mod_ne_merit_pay, digits = 4)
 print(mod_ne_merit_tenure, digits = 4)
