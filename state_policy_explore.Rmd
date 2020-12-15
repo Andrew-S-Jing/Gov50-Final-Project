@@ -88,7 +88,7 @@ equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>
 
 
 policy_vs_equity <- inner_join(state_policy, equity, by = c("state_abb" = "state"))
-
+policy_vs_equity <- policy_vs_equity[c(1, 2, 6, 3, 4, 5, 7, 8, 9, 10, 11)]
 
 
 equity
@@ -214,6 +214,7 @@ posterior_epred(mod_wb_merit_pay, newdata = state_merit_pay) %>%
   geom_vline(xintercept = 0, linetype = "dashed", color = "grey")
 
 
+<<<<<<< HEAD
 posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>% 
   as_tibble() %>% 
   mutate(diff = `2` - `1`) %>%  
@@ -229,6 +230,8 @@ posterior_epred(mod_ae_merit_pay, newdata = state_merit_pay) %>%
 
 
 
+=======
+>>>>>>> 334a6658a939c91e7ffb56852bc31f378ab2e17c
 
 print(mod_ne_merit_pay, digits = 4)
 print(mod_ne_merit_tenure, digits = 4)

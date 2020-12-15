@@ -53,6 +53,8 @@ equity <- inner_join(growth_scores, demographics, by = c("leaidC" = "leaid")) %>
 
 
 policy_vs_equity <- inner_join(state_policy, equity, by = c("state_abb" = "state"))
+policy_vs_equity <- policy_vs_equity[c(1, 2, 6, 3, 4, 5, 7, 8, 9, 10, 11)]
+
 
 
 
@@ -321,28 +323,38 @@ hist_wb_merit_tenure <- posterior_epred(mod_wb_merit_tenure, newdata = state_mer
 
 
 
-
-
-
-
-
 ui <- fluidPage(navbarPage(
   "State-Wide Equitable Education Policies",
   tabPanel(
     "Overview",
-      
-    h4("Policies"),
-    p("Merit Pay: Teacher pay that considers performance"),
-    p("Need Pay: Higher teacher pay in in high-need schools"),
-    p("Meit Tenure: Teacher tenure decisions requiring proof of teacher effectiveness"),
-    
+    h4("Growth Scores"),
+    p("The premise of this project is to correlate specific state-wide policies with each state school system's performance.
+      A classic measurement of school performance would measure each student's standardized test score, assuming that higher test scores mean that the school is benefitting the student highly.
+      However, the test score measurement of school performance neglects to account for student readiness: if a student comes into the schoolyear
+      already prepared to do well on standardized tests, then the end-of-year results may reflect the student's out-of-school preparedness
+      (e.g. academic summer camps, private tutoring, personal access to books and the internet) more than it reflects the school's effectiveness.
+      This means that schools with high testing may not have helped students' academic growth all that much, and this measurement could have mislabelled
+      lower-testing schools as ineffective when they could have already raised student performance since the year's beginning.
+      This also generally means that for analysis on educational equity, it seems that schools with more families with high access to
+      extracurricular education may seem fundamentally linked with better schools, which is discouraging for children with less access but
+      want to improve through certain equitable education policies."),
+    p("A better measure takes the \"rate of learning\" for each cohort of students across their years of standardized testing.
+      This growth score measurement somewhat eliminates out-of-school factors, giving both a better measurement of school performance and
+      ultimately a better measurement of how effective implemented equitable education policies are at benefitting students."),
     h4("Equity"),
-    p("Measured by the difference in differences of several sugroups' academic growth scores"),
+    p("This project takes growth score data from The Educational Oppportunity Project at Stanford University, which is subdivided by \"subgroups\"
+      including race and socioeconomic status. This project's measurements of equity take the difference in the state average growth scores between
+      these subgroups (e.g. the difference between a state's average white student growth scores and black student growth scores."),
+    h4("Policies"),
+    p("This project currently looks at the correlation between equity and 3 state-wide policies: merit pay, need pay, and merit tenure."),
+    p("Merit pay is the consideration of students' performances on testing when deciding on a teacher's pay."),
+    p("Need pay is the incentivization of teaching in high-need schools with differential pay."),
+    p("Merit tenure is the requirement of proof of teacher effectiveness when a teacher is being considered for tenure.")
+  ),
+  tabPanel(
+    "Maps",
     
-    
-    
-    
-    h4("Policies and Equity by State"),
+    h3("Policies and Equity by State"),
       
       
       
@@ -360,9 +372,12 @@ ui <- fluidPage(navbarPage(
                   choices = gap_names),
       plotOutput("map_equity")
 
+
   ),
+
   tabPanel("Correlation",
            
+           h4("Correlations between state policies and state equities"),
            
            selectInput(inputId = "policy2",
                        label = "Select a state-wide policy:",
@@ -385,16 +400,31 @@ ui <- fluidPage(navbarPage(
   ),
   tabPanel("About",
            
-           h4("Author"),
+           sidebarPanel("Downloads:", p(""),
+             downloadLink("downloadData", "Data Used"), p(""),
+             downloadLink("downloadCodebook", "Data Codebook"), p(""),
+             downloadLink("downloadApp", "Shiny App Code")
+             
+           ),
+           
+           mainPanel(
+           h4("Author:"),
            p("Andrew Jing"),
            
            
            h4("About"),
            p("This final project uses currently established state-wide policies
-             to predict the racial and socioeconomic inequities within the
-             state's school system."),
-           p("Currently the data comes from The Education Opportunity Project
-             at Stanford University and the National Council on Teacher Quality.")
+             to predict the racial and socioeconomic inequities within
+             state school systems."),
+           p("Next steps involve making the Shiny app easily expandable to other policies
+             without having to manually create maps, graphs, or boolean returns.
+             My goal is just to have to insert policy data into a .csv and the codebook."),
+           p("It would also be nice to find district-wide
+             or county-wide equity policies so there are more that only 50 data points to base predictions off of.
+             As of now, because of the limited data predictions are uncertain and relatively statistically insignificant.
+             However, I've not been able to find any, but maybe there's one state or another
+             that has collected that data.")
+           )
   )
 ))
 
@@ -435,7 +465,7 @@ server <- function(input, output, session) {
     selected_equity()
   })
   
-  
+
   
   selected_correlation <- reactive({
     if(input$policy2 == "Merit Pay" & input$gap2 == "Econ. disadvantaged vs. all students") return(hist_ae_merit_pay)
@@ -461,6 +491,27 @@ server <- function(input, output, session) {
   output$model <- renderUI({
     withMathJax("$$ equity\\_measurement_{i} = \\beta_0 + \\beta_1policy_{i} + \\epsilon_{i} $$")
   })
+
+  output$downloadCodebook <- downloadHandler(
+    filename = "policy_vs_equity_codebook.xlsx",
+    content = function(file) {
+      file.copy("used_data/policy_vs_equity_codebook.xlsx", file)
+    }
+  )
+  
+  output$downloadData <- downloadHandler(
+    filename = "policy_vs_equity.csv",
+    content = function(file) {
+      write.csv(policy_vs_equity, file, row.names = FALSE)
+    }
+  )
+  
+  output$downloadApp <- downloadHandler(
+    filename = "education_equity_project.R",
+    content = function(file) {
+      file.copy("Final.R", file)
+    }
+  )
   
   
 }
